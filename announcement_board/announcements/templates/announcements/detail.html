@@ -1,0 +1,33 @@
+{% extends 'base.html' %}  
+
+{% block content %}  
+<h1>{{ announcement.title }}</h1>  
+<p>{{ announcement.content }}</p>  
+<p>Category: {{ announcement.get_category_display }}</p>  
+<p>Posted by: {{ announcement.user.email }}</p>  
+<p>Created at: {{ announcement.created_at }}</p>  
+<p>Updated at: {{ announcement.updated_at }}</p>  
+
+<h2>Replies</h2>  
+{% for reply in announcement.reply_set.all %}  
+    <div class="card mb-3">  
+        <div class="card-body">  
+            <p>{{ reply.content }}</p>  
+            <p>Posted by: {{ reply.user.email }}</p>  
+            <p>Created at: {{ reply.created_at }}</p>  
+            {% if reply.is_accepted %}  
+                <p class="text-success">Accepted</p>  
+            {% endif %}  
+        </div>  
+    </div>  
+{% empty %}  
+    <p>No replies yet.</p>  
+{% endfor %}  
+
+<h2>Add a Reply</h2>  
+<form method="post">  
+    {% csrf_token %}  
+    {{ reply_form.as_p }}  
+    <button type="submit" class="btn btn-primary">Submit</button>  
+</form>  
+{% endblock %}

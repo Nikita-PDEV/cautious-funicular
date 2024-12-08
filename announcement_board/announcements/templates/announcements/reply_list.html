@@ -1,0 +1,34 @@
+{% extends 'base.html' %}  
+
+{% block content %}  
+<h1>My Replies</h1>  
+
+<div class="row">  
+    {% for reply in replies %}  
+        <div class="col-md-4 mb-4">  
+            <div class="card">  
+                <div class="card-body">  
+                    <h5 class="card-title">{{ reply.announcement.title }}</h5>  
+                    <p class="card-text">{{ reply.content }}</p>  
+                    <p>Posted by: {{ reply.user.email }}</p>  
+                    <p>Created at: {{ reply.created_at }}</p>  
+                    {% if reply.is_accepted %}  
+                        <p class="text-success">Accepted</p>  
+                    {% else %}  
+                        <form method="post" action="{% url 'reply_list' %}">  
+                            {% csrf_token %}  
+                            <input type="hidden" name="pk" value="{{ reply.id }}">  
+                            <button type="submit" name="accept" class="btn btn-success">Accept</button>  
+                            <button type="submit" name="reject" class="btn btn-danger">Reject</button>  
+                        </form>  
+                    {% endif %}  
+                </div>  
+            </div>  
+        </div>  
+    {% empty %}  
+        <div class="col-md-12">  
+            <p>No replies yet.</p>  
+        </div>  
+    {% endfor %}  
+</div>  
+{% endblock %}
